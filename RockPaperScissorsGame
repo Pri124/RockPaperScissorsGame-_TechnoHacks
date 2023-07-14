@@ -1,0 +1,65 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class RockPaperScissorsGame extends JFrame {
+    private JButton rockButton, paperButton, scissorsButton;
+    private JLabel resultLabel;
+
+    public RockPaperScissorsGame() {
+        super("Rock Paper Scissors");
+
+        rockButton = new JButton("Rock");
+        paperButton = new JButton("Paper");
+        scissorsButton = new JButton("Scissors");
+        resultLabel = new JLabel("Choose your move!");
+
+        rockButton.addActionListener(new ButtonListener());
+        paperButton.addActionListener(new ButtonListener());
+        scissorsButton.addActionListener(new ButtonListener());
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(rockButton);
+        buttonPanel.add(paperButton);
+        buttonPanel.add(scissorsButton);
+
+        setLayout(new BorderLayout());
+        add(buttonPanel, BorderLayout.CENTER);
+        add(resultLabel, BorderLayout.SOUTH);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 750);
+        setVisible(true);
+    }
+
+    private class ButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String userChoice = e.getActionCommand();
+            String computerChoice = generateComputerChoice();
+            String result = determineWinner(userChoice, computerChoice);
+            resultLabel.setText("You chose " + userChoice + ". Computer chose " + computerChoice + ". " + result);
+        }
+
+        private String generateComputerChoice() {
+            String[] choices = {"Rock", "Paper", "Scissors"};
+            int randomIndex = (int) (Math.random() * 3);
+            return choices[randomIndex];
+        }
+
+        private String determineWinner(String userChoice, String computerChoice) {
+            if (userChoice.equals(computerChoice)) {
+                return "It's a tie!";
+            } else if ((userChoice.equals("Rock") && computerChoice.equals("Scissors"))
+                    || (userChoice.equals("Paper") && computerChoice.equals("Rock"))
+                    || (userChoice.equals("Scissors") && computerChoice.equals("Paper"))) {
+                return "You win!";
+            } else {
+                return "Computer wins!";
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new RockPaperScissorsGame());
+    }
+}
